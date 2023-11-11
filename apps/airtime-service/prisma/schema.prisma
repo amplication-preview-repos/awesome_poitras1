@@ -17,3 +17,10 @@ model User {
   updatedAt DateTime @updatedAt
   username  String   @unique
 }
+
+model Transaction {
+  createdAt DateTime
+  id        String   @id @default(cuid())
+  slug      String?
+  updatedAt DateTime @updatedAt
+}
