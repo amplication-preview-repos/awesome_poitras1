@@ -11,8 +11,9 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional } from "class-validator";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsString, IsOptional, IsInt } from "class-validator";
+import { GraphQLBigInt } from "../../util/GraphQLBigInt";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 
@@ -47,6 +48,14 @@ class UserCreateInput {
   @IsString()
   @Field(() => String)
   password!: string;
+
+  @ApiProperty({
+    required: true,
+    type: Number,
+  })
+  @IsInt()
+  @Field(() => GraphQLBigInt)
+  phone_number!: bigint;
 
   @ApiProperty({
     required: true,

@@ -23,6 +23,7 @@ const CREATE_INPUT = {
   id: "exampleId",
   lastName: "exampleLastName",
   password: "examplePassword",
+  phone_number: 42242424,
   updatedAt: new Date(),
   username: "exampleUsername",
 };
@@ -32,6 +33,7 @@ const CREATE_RESULT = {
   id: "exampleId",
   lastName: "exampleLastName",
   password: "examplePassword",
+  phone_number: 42242424,
   updatedAt: new Date(),
   username: "exampleUsername",
 };
@@ -42,6 +44,7 @@ const FIND_MANY_RESULT = [
     id: "exampleId",
     lastName: "exampleLastName",
     password: "examplePassword",
+    phone_number: 42242424,
     updatedAt: new Date(),
     username: "exampleUsername",
   },
@@ -52,16 +55,17 @@ const FIND_ONE_RESULT = {
   id: "exampleId",
   lastName: "exampleLastName",
   password: "examplePassword",
+  phone_number: 42242424,
   updatedAt: new Date(),
   username: "exampleUsername",
 };
 
 const service = {
-  create() {
+  createUser() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  users: () => FIND_MANY_RESULT,
+  user: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

@@ -19,13 +19,13 @@ import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateTransactionArgs } from "./CreateTransactionArgs";
-import { UpdateTransactionArgs } from "./UpdateTransactionArgs";
-import { DeleteTransactionArgs } from "./DeleteTransactionArgs";
+import { Transaction } from "./Transaction";
 import { TransactionCountArgs } from "./TransactionCountArgs";
 import { TransactionFindManyArgs } from "./TransactionFindManyArgs";
 import { TransactionFindUniqueArgs } from "./TransactionFindUniqueArgs";
-import { Transaction } from "./Transaction";
+import { CreateTransactionArgs } from "./CreateTransactionArgs";
+import { UpdateTransactionArgs } from "./UpdateTransactionArgs";
+import { DeleteTransactionArgs } from "./DeleteTransactionArgs";
 import { TransactionService } from "../transaction.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Transaction)
@@ -60,7 +60,7 @@ export class TransactionResolverBase {
   async transactions(
     @graphql.Args() args: TransactionFindManyArgs
   ): Promise<Transaction[]> {
-    return this.service.findMany(args);
+    return this.service.transactions(args);
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
@@ -73,7 +73,7 @@ export class TransactionResolverBase {
   async transaction(
     @graphql.Args() args: TransactionFindUniqueArgs
   ): Promise<Transaction | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.transaction(args);
     if (result === null) {
       return null;
     }
@@ -90,7 +90,7 @@ export class TransactionResolverBase {
   async createTransaction(
     @graphql.Args() args: CreateTransactionArgs
   ): Promise<Transaction> {
-    return await this.service.create({
+    return await this.service.createTransaction({
       ...args,
       data: args.data,
     });
@@ -107,7 +107,7 @@ export class TransactionResolverBase {
     @graphql.Args() args: UpdateTransactionArgs
   ): Promise<Transaction | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateTransaction({
         ...args,
         data: args.data,
       });
@@ -131,7 +131,7 @@ export class TransactionResolverBase {
     @graphql.Args() args: DeleteTransactionArgs
   ): Promise<Transaction | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteTransaction(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(

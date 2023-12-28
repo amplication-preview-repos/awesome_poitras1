@@ -22,11 +22,10 @@ import { TransactionService } from "../transaction.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { TransactionCreateInput } from "./TransactionCreateInput";
-import { TransactionWhereInput } from "./TransactionWhereInput";
-import { TransactionWhereUniqueInput } from "./TransactionWhereUniqueInput";
-import { TransactionFindManyArgs } from "./TransactionFindManyArgs";
-import { TransactionUpdateInput } from "./TransactionUpdateInput";
 import { Transaction } from "./Transaction";
+import { TransactionFindManyArgs } from "./TransactionFindManyArgs";
+import { TransactionWhereUniqueInput } from "./TransactionWhereUniqueInput";
+import { TransactionUpdateInput } from "./TransactionUpdateInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
@@ -46,10 +45,10 @@ export class TransactionControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async create(
+  async createTransaction(
     @common.Body() data: TransactionCreateInput
   ): Promise<Transaction> {
-    return await this.service.create({
+    return await this.service.createTransaction({
       data: data,
       select: {
         createdAt: true,
@@ -72,9 +71,9 @@ export class TransactionControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async findMany(@common.Req() request: Request): Promise<Transaction[]> {
+  async transactions(@common.Req() request: Request): Promise<Transaction[]> {
     const args = plainToClass(TransactionFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.transactions({
       ...args,
       select: {
         createdAt: true,
@@ -97,10 +96,10 @@ export class TransactionControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async findOne(
+  async transaction(
     @common.Param() params: TransactionWhereUniqueInput
   ): Promise<Transaction | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.transaction({
       where: params,
       select: {
         createdAt: true,
@@ -129,12 +128,12 @@ export class TransactionControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async update(
+  async updateTransaction(
     @common.Param() params: TransactionWhereUniqueInput,
     @common.Body() data: TransactionUpdateInput
   ): Promise<Transaction | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateTransaction({
         where: params,
         data: data,
         select: {
@@ -165,11 +164,11 @@ export class TransactionControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async delete(
+  async deleteTransaction(
     @common.Param() params: TransactionWhereUniqueInput
   ): Promise<Transaction | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteTransaction({
         where: params,
         select: {
           createdAt: true,

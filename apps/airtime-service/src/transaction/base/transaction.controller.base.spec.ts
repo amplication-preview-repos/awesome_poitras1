@@ -45,11 +45,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createTransaction() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  transactions: () => FIND_MANY_RESULT,
+  transaction: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;
